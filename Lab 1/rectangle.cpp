@@ -1,54 +1,35 @@
-// Assignment 2: DDA Line Drawing Algorithm
-#include <iostream>
-#include <cmath>
 #include <GL/glut.h>
 
-float startX, startY, endX, endY;
-
-void putPixel(float x, float y) {
-    glBegin(GL_POINTS);
-        glVertex2f(x, y);
-    glEnd();
-}
-
-void ddaLineDrawing() {
+void display() {
     glClear(GL_COLOR_BUFFER_BIT);
-
-    float dx = endX - startX;
-    float dy = endY - startY;
-    int steps = std::max(abs(dx), abs(dy));
-
-    float xIncrement = dx / steps;
-    float yIncrement = dy / steps;
-
-    float x = startX, y = startY;
-    for (int i = 0; i <= steps; ++i) {
-        putPixel(x, y);
-        x += xIncrement;
-        y += yIncrement;
-    }
-
+    
+    // Draw the rectangle with red edges
+    glColor3f(1.0, 0.0, 0.0); // Red color for edges
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(-0.5, -0.5);
+        glVertex2f( 0.5, -0.5);
+        glVertex2f( 0.5,  0.5);
+        glVertex2f(-0.5,  0.5);
+    glEnd();
+    
     glFlush();
 }
 
 void init() {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glColor3f(1.0, 1.0, 1.0);
-    glPointSize(2.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0); // Black background
     glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(-100, 100, -100, 100);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1); // Set coordinate system
 }
 
 int main(int argc, char** argv) {
-    std::cout << "Enter startX, startY, endX, endY: ";
-    std::cin >> startX >> startY >> endX >> endY;
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(500, 500);
-    glutCreateWindow("DDA Line Drawing");
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("OpenGL Rectangle");
     init();
-    glutDisplayFunc(ddaLineDrawing);
+    glutDisplayFunc(display);
     glutMainLoop();
     return 0;
 }
